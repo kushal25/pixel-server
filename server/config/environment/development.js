@@ -11,6 +11,16 @@ module.exports = {
   },
 
   // Seed database on startup
-  seedDB: true
+  seedDB: true,
+
+  firebaseConfig : {
+    apiKey: "AIzaSyDzUV948hcMi1m-8ZCywxDeRgLflzWzibs",
+    authDomain: "pixie-4cf02.firebaseapp.com",
+    databaseURL: "https://pixie-4cf02.firebaseio.com",
+    storageBucket: "pixie-4cf02.appspot.com",
+    messagingSenderId: "672183312012"
+  }
+
+
 
 };
