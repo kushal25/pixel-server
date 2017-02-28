@@ -7,15 +7,20 @@ Modified on: 02/20/2016
 
 'use strict';
 /*Handler with Common Operations to avoid redundant Code */
-
-var Firebase = require("firebase");
-import config from '../../config/environment';
-var app = Firebase.initializeApp(config.firebaseConfig);
-console.log(app.name);
-var database = app.database();
+import Q from 'q';
 
 module.exports = {
-	write : function(data){
-		database.ref("sample").set(data);
-	}
-}
+	save:function(object) {
+        var deferred = Q.defer();
+        object.save(function(err, documents) {
+            if (err) {
+                deferred.reject();
+            } else {
+                deferred.resolve(documents);
+            }
+        });
+        return deferred.promise;
+    }
+
+
+};

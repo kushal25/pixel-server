@@ -2,6 +2,7 @@ node_modules
 public
 .tmp
 .idea
+.DS_STORE
 client/bower_components
 client/index.html
 dist
