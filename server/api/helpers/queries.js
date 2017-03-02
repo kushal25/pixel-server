@@ -10,6 +10,23 @@ Modified on: 02/20/2016
 import Q from 'q';
 
 module.exports = {
+	extractData:function(command){
+		var deferred = Q.defer();
+		var exec = require('child_process').exec;
+   		exec(command, function(err,documents){
+   			if(err)
+   			{
+   				console.log("Err " + err);
+   				deferred.reject();
+   			}
+   			else
+   			{
+   				console.log("Documents " + documents);
+   				deferred.resolve(documents);
+   			}
+   		});
+   		return deferred.promise;
+	},
 	save:function(object) {
         var deferred = Q.defer();
         object.save(function(err, documents) {
