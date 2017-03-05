@@ -16,12 +16,10 @@ module.exports = {
    		exec(command, function(err,documents){
    			if(err)
    			{
-   				console.log("Err " + err);
    				deferred.reject();
    			}
    			else
    			{
-   				console.log("Documents " + documents);
    				deferred.resolve(documents);
    			}
    		});
