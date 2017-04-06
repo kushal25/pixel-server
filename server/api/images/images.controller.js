@@ -21,7 +21,7 @@ export function writeData(req, res)
         }
         else
         {
-            res.status(400).json("Error Extract Response");
+            res.status(400).json("Error in Extract Response");
         }
     },
     error: function(err)

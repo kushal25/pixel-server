@@ -14,6 +14,8 @@ module.exports = {
     || process.env.PORT
     || 8080,
 
+  imageStorePath: '/home/ubuntu/uploads',
+
   // MongoDB connection options
   mongo: {
     uri: process.env.MONGODB_URI

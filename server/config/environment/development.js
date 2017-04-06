@@ -13,5 +13,6 @@ module.exports = {
   // Seed database on startup
   seedDB: true,
 
+  imageStorePath: '/Users/infinity/uploads'
 
 };
