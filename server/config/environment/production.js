@@ -21,6 +21,6 @@ module.exports = {
     uri: process.env.MONGODB_URI
       || process.env.MONGOHQ_URL
       || process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME
-      || 'mongodb://admin:imageExtraction123!!@52.26.134.106:27017/pixelDB'
+      || 'mongodb://admin:imageExtraction123!@52.53.93.85:27017/pixelDB'
   }
 };
