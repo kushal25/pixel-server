@@ -11,13 +11,33 @@ import queries from '../helpers/queries';
 
 export function writeData(req, res)
 {
-  var writer = 
+  var writer =
   {
     respond: function(extractResponse)
     {
         if(extractResponse)
         {
-            res.status(200).json(extractResponse);
+
+          function extractPhoneNumber( text) {
+            return text.match(/(^[a-zA-Z0-9._-])?(\+?\d{1,4}[\s-])?(?!0+\s+,?$)\(?\d{3}\)?([\-. ])?\d{3}([\-. ])?\d{4}/gi);
+          }
+
+          function extractEmails ( text ){
+            return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+          }
+          function extractURL ( text ) {
+            return text.match(/www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}/gi);
+          }
+          function extractDateAndTime( text ) {
+            return text.match(/^(([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0,1])([/+-]))?([1-9]|0[1-9]|1[0-2])([/+-])((19|20)[0-9]{2}|[0-9]{2})$|^(([1-9]|0[1-9]|1[0-2])([/+-]))?([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0,1])([/+-])((19|20)[0-9]{2}|[0-9]{2})|^(\d\d\d\d)|(\d\d)[/-](0?[1-9]|1[0-2])([/-])?(?:(0?[1-9]|[12][0-9]|3[01]))\s?(?:([AaPp]([\s.])?[Mm]([\s.])?))$/gi);
+          }
+          var number = extractPhoneNumber(extractResponse);
+          var email =  extractEmails(extractResponse);
+          var url = extractURL(extractResponse);
+          var dateAndTime = extractDateAndTime(extractResponse);
+
+          res.status(200).json({ "Email":   email, "Number" : number,"URL" : url,"Date-Time ":dateAndTime, "Extracted Text":extractResponse});
+
         }
         else
         {
