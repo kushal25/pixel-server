@@ -21,4 +21,5 @@ var router = express.Router();
 
 router.post('/writeData', upload.single('img'), controller.writeData);
 
+
 module.exports = router;

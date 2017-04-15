@@ -8,7 +8,7 @@ Modified on: 02/20/2016
 'use strict';
 /*Handler with Common Operations to avoid redundant Code */
 import Q from 'q';
-
+var im = require('imagemagick');
 module.exports = {
 	extractData:function(command){
 		var deferred = Q.defer();
@@ -25,6 +25,22 @@ module.exports = {
    		});
    		return deferred.promise;
 	},
+  processImage : function(file){
+	  var deferred = Q.defer();
+    im.convert([file,"-bordercolor","white","-border","1","-alpha","set",
+      "-channel","RGBA","-fuzz","28%",
+      "-fill", "white", "-opaque","white","-colorspace","Gray","-sharpen","10%", file]
+    ,function (err, documents) {
+      if(err)
+      {
+        deferred.reject();
+      }
+      else {
+        deferred.resolve("success");
+      }
+    });
+    return deferred.promise;
+  },
 	save:function(object) {
         var deferred = Q.defer();
         object.save(function(err, documents) {
