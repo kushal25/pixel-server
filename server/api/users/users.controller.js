@@ -16,6 +16,7 @@ import logger from '../helpers/logger';
 import customResponse from '../helpers/responseMessages';
 import status_codes from '../helpers/statusCodes';
 import User from './users.model';
+import response from '../helpers/response';
 
 export function userSignup(req, res, next) {
     try
@@ -60,16 +61,31 @@ export function userSignup(req, res, next) {
                             return queries.save(user);
                         }
                     }, //end of saveUser
-                    respond: function(signupResponse) {              
-                        if (signupResponse) {                                     
-                            res.status(_res.httpCode.success).json(signupResponse);
+                    authToken: function(saveResponse) {              
+                        if (saveResponse) {                                     
+                            var authToken = auth.signToken(saveResponse, customResponse.user);
+                            return queries.prepareResponseObject(saveResponse, "accessCode,plainTextPassword,userPassword,description,lastLoginAt,lastLogoutAt,createdAt,lastModifiedAt,image_ids,userStatus,loginStatus", authToken);               
                         } else {
-                            throw customResponse.responseError;
+                            throw customResponse.saveResponseError;
                         }
                     }, //end of respond
+                    respond: function(authTokenResponse){
+                    	if(authTokenResponse)
+                    	{
+                    		res.set({
+                                'X-Auth-Token': authTokenResponse["X-Auth-Token"]
+                            });                         
+                            res.status(_res.httpCode.success).json(response.jsonResponse(authTokenResponse));
+                    	}
+                    	else
+                    	{
+                    		throw customResponse.prepareResponseObjectError;
+                    	}
+                    },
                     error: function(err) {
                         if(err)
-                        {                      
+                        {                     
+                        	logger.log(err); 
                             error.handleError(res,_res.httpCode.bad_request,err);
                         }
                         else
@@ -85,7 +101,7 @@ export function userSignup(req, res, next) {
                     limit: 1
                 });
 
-                checkExistsPromise.then(writer.saveUser).then(writer.respond).fail(writer.error);
+                checkExistsPromise.then(writer.saveUser).then(writer.authToken).then(writer.respond).fail(writer.error);
             }
 
         } else {

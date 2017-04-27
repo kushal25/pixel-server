@@ -9,7 +9,7 @@ Modified on: 04/26/2017
 
 module.exports = {			
 	/**************************Common Response Messages********************************************/																																																																																																																																																																																																																																																																																																																																 	
-	user : "user",
+	user : "pixel-user",
 	invalidToken : "Invalid Auth Token",
 	noSignToken : "Unable to Sign Token",
 	decodeError : "Error in Decoding Token",
@@ -24,7 +24,8 @@ module.exports = {
 	/*User Signup */
 	userSignupMissing : "Signup Details Missing. Try Again!!",
 	userEmailExists : "Account with this email address Already exists",
-	responseError : "Error in receiving response from server",
-	userSignupError : "Something went wrong. Please Contact Pixel Support"	
+	saveResponseError : "Error in saving document to DB",
+	userSignupError : "Something went wrong. Please Contact Pixel Support",
+	prepareResponseObjectError: "Unable to prepare response object. Please Contact Radar Support"	
 	
 }

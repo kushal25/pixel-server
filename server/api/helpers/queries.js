@@ -8,6 +8,9 @@ Modified on: 02/20/2016
 'use strict';
 /*Handler with Common Operations to avoid redundant Code */
 import Q from 'q';
+import updateJsonObject from '../helpers/updateJsonObject';
+import Post from '../users/users.model';
+import logger from '../helpers/logger';
 var im = require('imagemagick');
 module.exports = {
 	extractData:function(command){
@@ -56,16 +59,40 @@ module.exports = {
   },
 
 	save:function(object) {
-        var deferred = Q.defer();
-        object.save(function(err, documents) {
-            if (err) {
-                deferred.reject();
-            } else {
-                deferred.resolve(documents);
-            }
-        });
-        return deferred.promise;
-    }
+      var deferred = Q.defer();
+      object.save(function(err, documents) {
+          if (err) {
+              deferred.reject();
+          } else {
+              deferred.resolve(documents);
+          }
+      });
+      return deferred.promise;
+  },
+
+  prepareResponseObject : function(jsonObj, removeElement, addElement)
+  {
+      var deferred = Q.defer();
+      var remEle = removeElement.split(",");
+      var newJsonObject = jsonObj.toObject();
+      for(var i = 0; i < remEle.length; i++)
+      {
+          newJsonObject = updateJsonObject.delete(newJsonObject, remEle[i]); //remove object from response object
+      }
+      if(addElement!==null)
+      {
+          newJsonObject = updateJsonObject.add(newJsonObject,"X-Auth-Token",addElement); // add token to response object
+      }
+      if(newJsonObject)
+      {
+          deferred.resolve(newJsonObject);
+      }
+      else
+      {
+          deferred.reject();
+      }
+      return deferred.promise;
+  },
 
 
 };
