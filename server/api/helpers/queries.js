@@ -25,6 +25,7 @@ module.exports = {
    		});
    		return deferred.promise;
 	},
+
   processImage : function(file){
 	  var deferred = Q.defer();
     im.convert([file,"-bordercolor","white","-border","1","-alpha","set",
@@ -41,6 +42,19 @@ module.exports = {
     });
     return deferred.promise;
   },
+
+ find : function(DB, query, fields, options) {
+      var deferred = Q.defer();
+      DB.find(query, fields, options, function(err, documents) {
+          if (err) {
+              deferred.reject();
+          } else {
+              deferred.resolve(documents);
+          }
+      });
+      return deferred.promise;
+  },
+
 	save:function(object) {
         var deferred = Q.defer();
         object.save(function(err, documents) {
