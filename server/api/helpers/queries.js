@@ -94,5 +94,18 @@ module.exports = {
       return deferred.promise;
   },
 
+  findOneAndUpdate : function(DB, query, update, options) {
+        var deferred = Q.defer();
+        DB.findOneAndUpdate(query, update, options, function(err, documents) {
+            if (err) {
+                logger.log("Find and Update Query Error: " + err);
+                deferred.reject();
+            } else {
+                deferred.resolve(documents);
+            }
+        });
+        return deferred.promise;
+    }
+
 
 };

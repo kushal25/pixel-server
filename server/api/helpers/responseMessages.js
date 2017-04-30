@@ -26,6 +26,15 @@ module.exports = {
 	userEmailExists : "Account with this email address Already exists",
 	saveResponseError : "Error in saving document to DB",
 	userSignupError : "Something went wrong. Please Contact Pixel Support",
-	prepareResponseObjectError: "Unable to prepare response object. Please Contact Radar Support"	
+	prepareResponseObjectError: "Unable to prepare response object. Please Contact Radar Support",
+
+	/*User Login */
+	userLoginFailed :  "Authentication Failed",
+	noUser : "No Such User exists. Signup on Radar",	
+	userLoginMissing : "Login Details Missing. Try Again",
+	updateLoginStatusFailed : "Unable to update Login Status and Time",
+	responseObjError : "Error in preparing response object",
+	userLoginError : "Something went wrong. Please Contact Radar Support",
+	deactiveUser : "Your account has been deactivated. Contact Radar Support",
 	
 }
