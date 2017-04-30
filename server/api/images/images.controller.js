@@ -95,12 +95,12 @@ console.log("extracted remove literals :" + abc);
     }
   }
 
-  //var tesseractPromise = queries.extractData("tesseract " + req.file.path + " stdout");
-  //tesseractPromise.then(writer.respond).fail(writer.error);
+  var tesseractPromise = queries.extractData("tesseract " + req.file.path + " stdout");
+  tesseractPromise.then(writer.respond).fail(writer.error);
 
-    var tesseractPromise =   queries.processImage(req.file.path);
+   /* var tesseractPromise =   queries.processImage(req.file.path);
 
     tesseractPromise.then(writer.extractData).then(writer.respond).fail(writer.error);
-
+*/
 
 }
