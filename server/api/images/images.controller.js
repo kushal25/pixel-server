@@ -44,17 +44,23 @@ export function writeData(req, res)
         {
 
           function extractPhoneNumber( text) {
+            text.replace("—","-");
             return text.match(/(^[a-zA-Z0-9._-])?(\+?\d{1,4}[\s-])?(?!0+\s+,?$)\(?\d{3}\)?([\-. ])?\d{3}([\-. ])?\d{4}/gi);
           }
 
           function extractEmails ( text ){
+
             return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
           }
           function extractURL ( text ) {
-            return text.match(/www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}/gi);
+            return text.match(/(www\.)?[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}/gi);
           }
           function extractDateAndTime( text ) {
-            return text.match(/^(([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0,1])([/+-]))?([1-9]|0[1-9]|1[0-2])([/+-])((19|20)[0-9]{2}|[0-9]{2})$|^(([1-9]|0[1-9]|1[0-2])([/+-]))?([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0,1])([/+-])((19|20)[0-9]{2}|[0-9]{2})|^(\d\d\d\d)|(\d\d)[/-](0?[1-9]|1[0-2])([/-])?(?:(0?[1-9]|[12][0-9]|3[01]))\s?(?:([AaPp]([\s.])?[Mm]([\s.])?))$/gi);
+            return text.match(/^(([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0,1])([/+-]))?([1-9]|0[1-9]|1[0-2])([/+-])((19|20)[0-9]{2}|[0-9]{2})$|^(([1-9]|0[1-9]|1[0-2])([/+-]))?([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0,1])([/+-])((19|20)[0-9]{2}|[0-9]{2})|^(\d\d\d\d)|(\d\d)[/-](0?[1-9]|1[0-2])([/-])?(?:(0?[1-9]|[12][0-9]|3[01]))\s?(?:([AaPp]([\s.])?[Mm]([\s.])?))|(Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|Jun(e)?|Jul(y)?|Aug(ust)?|Sep(tember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?)\s+\d{1,2},\s+\d{4}/gi);
+          }
+          //Added Time extraction;
+          function extractTime(text){
+            return text.match(/((1[0-2]|0?[1-9]):([0-5][0-9])( )?([AaPp][Mm]))/gi);
           }
           var abc = extractResponse.replace(/(?:\\[rn]|[\r\n]+)+/g, " ");
 console.log("extracted remove literals :" + abc);
@@ -62,7 +68,7 @@ console.log("extracted remove literals :" + abc);
           var email =  extractEmails(extractResponse);
           var url = extractURL(extractResponse);
           var dateAndTime = extractDateAndTime(extractResponse);
-
+          var time = extractTime(extractResponse);
           res.status(200).json(
             {ExtractedData:[{
               "metadata": "email",
@@ -76,6 +82,9 @@ console.log("extracted remove literals :" + abc);
             },{
               "metadata": "DateandTime",
               "data":   dateAndTime
+            },,{
+              "metadata":"time",
+              "data": time
             },{
               "metadata":"CompleteText",
               "data": abc
