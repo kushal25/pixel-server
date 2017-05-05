@@ -21,7 +21,6 @@ function processImage(file){
       "-fill", "white", "-opaque","white","-colorspace","Gray","-sharpen","10%", file]
  );
 
-
 }
 export function writeData(req, res)
 {
@@ -68,27 +67,39 @@ console.log("extracted remove literals :" + abc);
           var email =  extractEmails(extractResponse);
           var url = extractURL(extractResponse);
           var dateAndTime = extractDateAndTime(extractResponse);
-          var time = extractTime(extractResponse);
+          var stime = null;
+          var etime = null;
+          if(extractTime(extractResponse).length >=1){
+            stime = extractTime(extractResponse)[0];
+          }
+          if(extractTime(extractResponse).length >= 2)
+          {
+            etime = extractTime(extractResponse)[1];
+          }
           res.status(200).json(
             {ExtractedData:[{
-              "metadata": "email",
+              "metadata": "Email Address",
               "data":   email
             },{
-              "metadata": "phonenumber",
+              "metadata": "Contact",
               "data":   number
             },{
-              "metadata": "url",
+              "metadata": "Web URL",
               "data":   url
             },{
-              "metadata": "DateandTime",
+              "metadata": "Date",
               "data":   dateAndTime
-            },,{
-              "metadata":"time",
-              "data": time
             },{
-              "metadata":"CompleteText",
-              "data": abc
-            }
+              "metadata":"Start Time",
+              "data": stime
+            }, {
+              "metadata":"End Time",
+              "data": etime
+            },{
+                "metadata":"CompleteText",
+                "data": abc
+              }
+
 
             ]});
 
