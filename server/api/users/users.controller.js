@@ -169,7 +169,7 @@ export function userLogin(req, res, next) {
                     updateLoginTime: function(authUserResponse) {
                         if (authUserResponse) {
                             var authToken = auth.signToken(authUserResponse, customResponse.user);
-                            return queries.prepareResponseObject(authUserResponse, "accessCode,plainTextPassword,userPassword,description,lastLoginAt,lastLogoutAt,createdAt,lastModifiedAt,image_ids, userStatus,loginStatus", authToken);               
+                            return queries.prepareResponseObject(authUserResponse, "accessCode,userPassword,description,lastLoginAt,lastLogoutAt,createdAt,lastModifiedAt,image_ids, userStatus,loginStatus", authToken);               
                         } else {
                             throw customResponse.updateLoginStatusFailed;
                         }
@@ -206,6 +206,67 @@ export function userLogin(req, res, next) {
             }
         } else {
             error.handleError(res,_res.httpCode.bad_request, customResponse.userLoginMissing);
+        }
+    }
+    catch(e)
+    {
+        logger.log(e.stack);
+        error.handleError(res, _res.httpCode.internal_server_error, customResponse.internalServerError);
+    }
+}
+
+export function userInfo(req, res, next) {
+    try
+    {
+    	var authToken = req.get('X-Auth-Token');
+        var decodeToken = auth.validateToken(authToken, customResponse.user);
+
+        if(decodeToken._id)
+        {
+        	var writer = {
+        		filter: function(findResponse)
+        		{
+        			if(findResponse.length>0)
+        			{
+        				return queries.prepareResponseObject(findResponse[0], "accessCode,userPassword,description,lastLogoutAt,createdAt,lastModifiedAt,image_ids,userStatus,loginStatus", null);               	
+        			}
+        			else
+        			{
+        				error.handleError(res,_res.httpCode.bad_request, customResponse.filterObjError);
+        			}
+        		}, //end of filter
+        		user: function(filterResponse)
+        		{
+        			if(filterResponse)
+        			{
+        				res.status(_res.httpCode.success).json(response.jsonResponse(filterResponse));
+        			}
+        			else
+        			{
+        				error.handleError(res,_res.httpCode.bad_request, customResponse.noUserInfo);
+        			}
+        		},//end of user
+        		error: function(err) {
+                    if(err)
+                    {
+                        error.handleError(res,_res.httpCode.bad_request, err);
+                    }
+                    else
+                    {
+                        error.handleError(res,_res.httpCode.bad_request, customResponse.userInfoError);
+                    }
+     	        } //end of error
+        	}
+        	var userPromise = queries.find(User, {
+                _id: decodeToken._id
+            }, {}, {
+                limit: 1
+            });
+        	userPromise.then(writer.filter).then(writer.user).fail(writer.error);
+        }
+        else
+        {
+        	error.handleError(res,_res.httpCode.forbidden, customResponse.invalidToken);
         }
     }
     catch(e)
