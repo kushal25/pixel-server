@@ -40,6 +40,8 @@ module.exports = {
 	/*User Info*/
 	filterObjError: "Error in preparing response object",
 	noUserInfo: "No Such User exists",
-	userInfoError: "Something went wrong. Please Contact Pixel Support"
+	userInfoError: "Something went wrong. Please Contact Pixel Support",
+
+	/*Write Data*/
 	
 }
